@@ -4,12 +4,12 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.create(answer_params)
-    redirect_to question_path(@question)
     if @answer.save
       flash[:success] = 'Your answer created'
     else
       flash[:alert] = 'Your answer not created'
     end
+        redirect_to question_path(@question)
   end
 
   def edit
