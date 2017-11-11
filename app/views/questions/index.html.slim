@@ -1,1 +1,16 @@
+h1 Questions
+
+- unless @questions.empty?
+  table
+    - @questions.each do |question|
+      tr
+        td.title = link_to question.title, question
+        td.body = question.body
+- else
+      p
+      | No questions found.  Please add some question.
+           Thank you!
+
+
 p= link_to 'Ask question', new_question_path
+

@@ -1,15 +1,19 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_question, only: [:create, :destroy, :update]
   before_action :set_answer, only: [:edit, :update, :destroy]
 
   def create
     @answer = @question.answers.create(answer_params)
+    @answer.user = current_user
+
     if @answer.save
-      flash[:success] = 'Your answer created'
+      redirect_to @question
+      flash[:notice] = 'Your answer created'
     else
       flash[:alert] = 'Your answer not created'
+      redirect_back fallback_location: @question
     end
-        redirect_to question_path(@question)
   end
 
   def edit

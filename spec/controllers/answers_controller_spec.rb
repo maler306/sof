@@ -2,18 +2,20 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
 
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer, question: question) }
+  let(:user) { create(:user)}
+  let(:question) { create(:question, user: user) }
+  let(:answer) { create(:answer, question: question, user: user) }
 
   describe 'POST #create' do
+    sign_in_user
     context 'with valid attributes' do
       it 'saves the new answer in the database' do
-        expect { post :create, params: { question_id: question, answer:  attributes_for(:answer) } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
       end
 
       it 'renders success notice' do
         post :create, params: { question_id: question, answer:  attributes_for(:answer) }
-        expect(flash[:success]).to be_present
+        expect(flash[:notice]).to be_present
       end
 
     end

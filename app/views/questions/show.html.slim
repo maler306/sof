@@ -1,0 +1,11 @@
+div id= "question-#{@question.id}"
+ .question-data
+    h3= @question.title
+    p=  @question.body
+
+    table
+      - @question.answers.each do |answer|
+        tr
+          td.body = answer.body
+
+    = render 'answers/form'
