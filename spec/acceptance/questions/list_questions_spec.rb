@@ -7,7 +7,7 @@ feature 'List of questions', %q{
 } do
 
   scenario 'User views the list of questions' do
-    questions = FactoryGirl.create_list(:question, 3)
+    questions = FactoryBot.create_list(:question, 3)
 
     visit '/questions'
     expect(page).to have_content('MyString', count: 3)

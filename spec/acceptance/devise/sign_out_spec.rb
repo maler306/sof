@@ -21,7 +21,7 @@ scenario 'Non-registered user does not see note Log out' do
   visit root_path
 
   expect(page).to have_no_content 'Log out'
-  expect(page).to have_content 'LogIn'
+  expect(page).to have_content 'Log In'
 end
 
 end

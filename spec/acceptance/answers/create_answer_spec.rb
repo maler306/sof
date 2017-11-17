@@ -21,13 +21,11 @@ feature 'Create answer', %q{
     expect(page).to have_content 'New answer for the question.'
   end
 
-  scenario 'Non-authenticated user try to create answer' do
+  scenario 'Non-authenticated user  do not see form for answering question' do
     visit question_path(question)
-    fill_in 'Give your answer', with: 'New answer for the question.'
-    click_on 'Add answer'
 
-    # save_and_open_page
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).not_to have_field('Give your answer')
+    expect(page).not_to have_selector("input[type=submit][value='Add answer']")
   end
 
   scenario 'user try to create non valid answer' do

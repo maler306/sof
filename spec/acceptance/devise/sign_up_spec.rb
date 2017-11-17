@@ -12,7 +12,7 @@ feature 'User sign up',  %q{
     data = attributes_for(:user)
 
     visit root_path
-    click_on 'SignUp'
+    click_on 'Sign Up'
 
     fill_in 'Email', with: data[:email]
     fill_in 'Password', with: data[:password]

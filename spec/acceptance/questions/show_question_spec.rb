@@ -6,6 +6,7 @@ feature 'Question with an answers', %q{
   I want to view question with its answers and form for new answer
 } do
 
+  given(:user) { create(:user) }
   given(:question) { create(:question) }
   given!(:answers) { create_list(:answer, 3, question: question) }
 
@@ -17,9 +18,14 @@ feature 'Question with an answers', %q{
     expect(page).to have_content question.title
     expect(page).to have_content question.body
     "#{answers.each {|answer| expect(page).to have_content answer.body } }"
+
+  end
+
+  scenario 'Aunteficate user views the form for answering question' do
+    sign_in(user)
+    visit question_path(question)
+
     expect(page).to have_field('Give your answer')
     expect(page).to have_selector("input[type=submit][value='Add answer']")
   end
-
-
 end

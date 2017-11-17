@@ -86,29 +86,30 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     sign_in_user
-    context 'valid attributes' do
+    let!(:users_question) { create(:question, user: @user) }
+
+    context 'update by author with valid attributes' do
+      before { process :update, method: :patch, params: {id: users_question.id, question:  { title: 'new title', body: 'new body' } } }
+
       it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question:  attributes_for(:question) }
-        expect(assigns(:question)).to eq question
+        expect(assigns(:question)).to eq users_question
       end
 
       it 'change question attributes' do
-        patch :update, params: {id: question, question:  { title: 'new title', body: 'new body' } }
-        question.reload
-        expect(question.title).to eq 'new title'
-        expect(question.body).to eq 'new body'
+        users_question.reload
+        expect(users_question.title).to eq 'new title'
+        expect(users_question.body).to eq 'new body'
       end
 
       it 'redirects to the updated question' do
-        patch :update, params: {id: question, question:  attributes_for(:question) }
-        expect(response).to redirect_to question
+        expect(response).to redirect_to users_question
       end
     end
 
-    context 'invalid attributes' do
-      before { patch :update, params: { id: question, question:  { title: 'new title', body: nil} } }
+    context 'update by author with invalid attributes' do
+      before { patch :update, params: { id: users_question.id, question:  { title: 'new title', body: nil} } }
       it 'does not change question attributes' do
-        question.reload
+        users_question.reload
         expect(question.title).to eq 'MyString'
         expect(question.body).to eq 'MyText'
       end
@@ -117,19 +118,39 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :edit
       end
     end
+
   end
 
   describe 'DELETE #destroy' do
     sign_in_user
-    it 'deletes question' do
-      question
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+
+    context 'delete by author' do
+      let!(:users_question) { create(:question, user: @user) }
+
+      it 'deletes question' do
+        users_question
+        expect { delete :destroy, params: { id: users_question.id } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirect to index view' do
+        delete :destroy, params: { id: users_question.id }
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirect to index view' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
-    end
+    context 'delete by not author' do
+
+      it 'deletes question' do
+        question
+        expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
+      end
+
+      it 'redirect to index view' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to question_path(assigns(:question))
+      end
+
+  end
   end
 
 end

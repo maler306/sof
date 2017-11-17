@@ -1,11 +1,33 @@
 div id= "question-#{@question.id}"
  .question-data
     h3= @question.title
+    a author:
+    a= @question.user.email
     p=  @question.body
 
     table
       - @question.answers.each do |answer|
         tr
           td.body = answer.body
+          - if user_signed_in? && current_user.owner?(answer)
+           td = link_to 'Edit answer', edit_question_answer_path(answer.question, answer)
+           td = link_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete, data: { confirm: 'Are you sure?' }
 
-    = render 'answers/form'
+
+    - if user_signed_in?
+     = render "answers/form"
+
+     - if current_user.owner?(@question)
+      h3 Update question.
+      = render 'common/errors', resource: @question
+      = form_for @question, html: {id: "edit-question-#{@question.id}"}, remote: true do |f|
+       = f.label :title, 'Update question title'
+       = f.text_field :title
+       br
+
+       = f.label :body, 'Update question body'
+       = f.text_area :body
+       = f.submit "Update question"
+       br
+
+        = link_to 'Delete question', @question, method: :delete, data: { confirm: 'Are you sure?' }
