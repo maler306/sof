@@ -6,14 +6,12 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.create(answer_params)
     @answer.user = current_user
-
-    if @answer.save
-      redirect_to @question
-      flash[:notice] = 'Your answer created'
-    else
-      flash[:alert] = 'Your answer not created'
-      redirect_back fallback_location: @question
-    end
+      if @answer.save
+        redirect_to @question
+        flash[:notice] = 'Your answer created'
+      else
+        flash[:notice] = 'Your answer not created'
+      end
   end
 
   def edit
@@ -25,18 +23,18 @@ class AnswersController < ApplicationController
       redirect_to @question
       flash[:notice] = 'Your answer successfully edited.'
     else
-      flash[:alert] = 'Your answer not updated'
+      flash[:notice] = 'Your answer not updated'
     end
   end
 
   def destroy
     if current_user.owner?(@answer)
       @answer.destroy
-      redirect_to @question
       flash[:notice] = 'Your answer successfully deleted.'
     else
       flash[:notice] = 'Your are not author of the answer'
     end
+    redirect_to @question
   end
 
   private

@@ -22,12 +22,12 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, params: { question_id: question, answer:  attributes_for(:invalid_answer) } }.to_not change(question.answers, :count)
+        expect { post :create, params: { question_id: question, answer:  attributes_for(:invalid_answer), format: :js  } }.to_not change(question.answers, :count)
       end
 
-      it 'renders alert notice' do
-        post :create, params: { question_id: question, answer: attributes_for(:invalid_answer) }
-        expect(flash[:alert]).to be_present
+      it 'renders notice notice' do
+        post :create, params: { question_id: question, answer: attributes_for(:invalid_answer), format: :js  }
+        expect(flash[:notice]).to be_present
       end
     end
 
@@ -72,7 +72,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'update by author with invalid attributes' do
-      before { patch :update, params: { id: author_answer, question_id: question, answer: { body: nil } } }
+      before { patch :update, params: { id: author_answer, question_id: question, answer: { body: nil } }, format: :js  }
 
       it 'does not change answer attributes' do
         author_answer.reload
