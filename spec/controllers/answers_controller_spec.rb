@@ -10,7 +10,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'saves the new answer in the database' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(@user.answers, :count).by(1)
       end
 
       it 'renders success notice' do
@@ -22,7 +22,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, params: { question_id: question, answer:  attributes_for(:invalid_answer), format: :js  } }.to_not change(question.answers, :count)
+        expect { post :create, params: { question_id: question, answer:  attributes_for(:invalid_answer), format: :js  } }.to_not change(Answer, :count)
       end
 
       it 'renders notice notice' do
@@ -92,7 +92,7 @@ RSpec.describe AnswersController, type: :controller do
       let(:author_answer) { create(:answer, question: question, user: @user) }
       it 'deletes answer' do
         author_answer
-        expect { delete :destroy, params: { id: author_answer, question_id: question } }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: { id: author_answer, question_id: question } }.to change(@user.answers, :count).by(-1)
       end
 
       it 'redirect to question show view' do
@@ -106,6 +106,12 @@ RSpec.describe AnswersController, type: :controller do
         answer
         expect { delete :destroy, params: { id: answer, question_id: question } }.not_to change(Answer, :count)
       end
+
+      it 'redirect to question show view' do
+        delete :destroy, params: { id: answer, question_id: question }
+        expect(response).to redirect_to question_path(question)
+      end
+
     end
   end
 

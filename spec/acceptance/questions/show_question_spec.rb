@@ -17,7 +17,14 @@ feature 'Question with an answers', %q{
 
     expect(page).to have_content question.title
     expect(page).to have_content question.body
-    "#{answers.each {|answer| expect(page).to have_content answer.body } }"
+    expect(page).to have_css("table#answers tr", :count=>3+1)#в конце таблицы пустой tr c <td class="body"></td>
+
+    within('#answers') do
+      answers.each do |answer|
+        expect(page).to have_content answer.body
+        expect(answer.body).to match /^MyTextTextText\d+$/
+      end
+    end
 
   end
 

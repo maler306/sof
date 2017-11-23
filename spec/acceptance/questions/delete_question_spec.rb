@@ -25,8 +25,14 @@ feature 'Delete question', %q{
 
   end
 
-  scenario 'Non-authenticated user do not see delete question link' do
+  scenario 'Not author of the question do not see delete question link' do
     sign_in(other_user)
+    visit question_path(question)
+
+    expect(page).to_not have_link 'Delete question'
+  end
+
+  scenario 'Non-authenticated user do not see delete question link' do
     visit question_path(question)
 
     expect(page).to_not have_link 'Delete question'

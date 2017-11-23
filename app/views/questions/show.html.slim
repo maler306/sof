@@ -5,7 +5,7 @@ div id= "question-#{@question.id}"
     a= @question.user.email
     p=  @question.body
 
-    table
+    table#answers
       - @question.answers.each do |answer|
         tr
           td.body = answer.body
