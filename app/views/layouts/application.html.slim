@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    title SOF
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+  body
+    p .class="notice" = notice
+    p .class="alert"  = alert
+
+    - if user_signed_in?
+      = current_user.email
+      = link_to 'Log out', destroy_user_session_path, :method => :delete
+      br
+    - else
+      = link_to 'Log In', new_user_session_path
+      br
+      = link_to 'Sign Up', new_user_registration_path
+      br
+    = yield
+    = debug params
