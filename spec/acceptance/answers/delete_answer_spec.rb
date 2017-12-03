@@ -23,4 +23,17 @@ feature 'Delete answer', %q{
     expect(page).not_to have_content answer.body
   end
 
+  scenario 'User do not see links for deleting not his answer' do
+    sign_in(other_user)
+    visit question_path(question)
+
+    expect(page).to_not have_button 'Delete answer'
+  end
+
+  scenario 'Non-authenticated user  do not see links for deleting not his answer' do
+    visit question_path(question)
+
+    expect(page).to_not have_button 'Delete answer'
+  end
+
 end

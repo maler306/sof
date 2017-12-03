@@ -39,19 +39,17 @@ feature 'Edit answer', %q{
     expect(page).to have_content 'Body is too short (minimum is 10 characters)'
   end
 
-  scenario 'User do not see links for editing or delete not his answer' do
+  scenario 'User do not see links for editing not his answer' do
     sign_in(other_user)
     visit question_path(question)
 
     expect(page).to_not have_button 'Edit answer'
-    expect(page).to_not have_button 'Delete answer'
   end
 
-  scenario 'Non-authenticated user  do not see links for editing or delete not his answer' do
+  scenario 'Non-authenticated user  do not see links for editing not his answer' do
     visit question_path(question)
 
     expect(page).to_not have_button 'Edit answer'
-    expect(page).to_not have_button 'Delete answer'
   end
 
 end

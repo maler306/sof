@@ -18,6 +18,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(flash[:notice]).to be_present
       end
 
+      it 'redirect  to question show view'
+
     end
 
     context 'with invalid attributes' do
