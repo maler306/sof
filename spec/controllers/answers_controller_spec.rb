@@ -10,15 +10,18 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'saves the new answer in the database' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(@user.answers, :count).by(1)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js } }.to change(@user.answers, :count).by(1)
       end
 
       it 'renders success notice' do
-        post :create, params: { question_id: question, answer:  attributes_for(:answer) }
+        post :create, params: { question_id: question, answer:  attributes_for(:answer), format: :js }
         expect(flash[:notice]).to be_present
       end
 
-      it 'redirect  to question show view'
+      it 'render create template' do
+        post :create, params: { question_id: question, answer:  attributes_for(:answer), format: :js }
+        expect(response).to render_template :create
+      end
 
     end
 
@@ -33,9 +36,9 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-      it 'redirect to question show view' do
-        post :create, params: { question_id: question, answer:  attributes_for(:answer) }
-        expect(response).to redirect_to question_path(assigns(:question))
+      it 'render create template' do
+        post :create, params: { question_id: question, answer:  attributes_for(:answer), format: :js }
+        expect(response).to render_template :create
       end
   end
 
