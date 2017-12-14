@@ -6,7 +6,7 @@ div id= "question-#{@question.id}"
     p=  @question.body
 
     table.answers
-      = render 'answers'
+      = render @question.answers
 
 
     - if user_signed_in?

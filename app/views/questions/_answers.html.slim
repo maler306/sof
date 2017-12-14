@@ -1,6 +1,0 @@
-- @question.answers.each do |answer|
-  tr
-    td.body = answer.body
-    - if user_signed_in? && current_user.owner?(answer)
-     td = link_to 'Edit answer', edit_question_answer_path(answer.question, answer)
-     td = link_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete, data: { confirm: 'Are you sure?' }
