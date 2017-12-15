@@ -4,6 +4,6 @@ $('.flash').html('<%= flash[:notice] %>');
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('.answers').append("<%= j render @answer %>");
-  $('#new-answer-form').val('');
+  $('.answers').append('<%= j render @answer %>');
+  $('#answer_body').val('');
 <% end %>

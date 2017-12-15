@@ -7,7 +7,6 @@ class AnswersController < ApplicationController
     @answer = @question.answers.create(answer_params)
     @answer.user = current_user
       if @answer.save
-        redirect_to @question
         flash[:notice] = 'Your answer created'
       else
         flash[:notice] = 'Your answer not created'

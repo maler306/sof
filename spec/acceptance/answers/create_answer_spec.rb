@@ -18,7 +18,9 @@ feature 'Create answer', %q{
 
     expect(current_path).to eq question_path(question)
     expect(page).to have_content 'Your answer created'
-    expect(page).to have_content 'New answer for the question.'
+    within('.answers') do
+      expect(page).to have_content 'New answer for the question.'
+    end
   end
 
   scenario 'Authenticated user create the invalid answer for the question', js: true do

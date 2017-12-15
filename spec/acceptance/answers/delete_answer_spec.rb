@@ -7,6 +7,7 @@ feature 'Delete answer', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:other_user) { create(:user) }
   given(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question, user: user) }
 
