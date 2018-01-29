@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'acceptance_helper'
 
 feature 'Edit answer', %q{
   In order to edit answer for the question

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'acceptance_helper'
 
 feature 'Question with an answers', %q{
   In order to find out solution of a problem
@@ -17,7 +17,7 @@ feature 'Question with an answers', %q{
 
     expect(page).to have_content question.title
     expect(page).to have_content question.body
-    expect(page).to have_css("table.answers tr", :count=>3+1)#в конце таблицы пустой tr c <td class="body"></td>
+    expect(page).to have_css("table.answers tr", :count=>3)
 
     within('.answers') do
       answers.each do |answer|
