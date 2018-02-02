@@ -1,0 +1,6 @@
+div id= "question-#{@question.id}"
+ .question-data
+    h3= @question.title
+    a author:
+    a= @question.user.email
+    p=  @question.body

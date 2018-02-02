@@ -29,12 +29,13 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
+    if current_user.owner?(@question)
+      @question.update(question_params)
+      # redirect_to @question
       flash[:notice] = 'Your question successfully edited.'
     else
       flash[:notice] = 'Question not edited.'
-      render :edit
+      # render :edit
     end
   end
 

@@ -13,13 +13,9 @@ class AnswersController < ApplicationController
       end
   end
 
-  def edit
-  end
-
   def update
-
-    if @answer.update(answer_params) && current_user.owner?(@answer)
-      redirect_to @question
+    if current_user.owner?(@answer)
+      @answer.update(answer_params)
       flash[:notice] = 'Your answer successfully edited.'
     else
       flash[:notice] = 'Your answer not updated'

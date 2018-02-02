@@ -1,8 +1,10 @@
 $('.flash').html('<%= flash[:notice] %>');
 <% if @answer.errors.present? %>
+  <% errors = '' %>
   <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').html('<%= j message %>');
+    <% errors << "#{message}" %>
   <% end %>
+    $('.answer-errors').html('<%= j errors %>');
 <% else %>
   $('.answers').append('<%= j render @answer %>');
   $('#answer_body').val('');

@@ -42,27 +42,18 @@ RSpec.describe AnswersController, type: :controller do
       end
   end
 
-  describe 'GET #edit' do
-    context 'edit by author' do
-      before { get :edit, xhr: true, params: { question_id: question, id: answer} }
-      it 'assigns the requested answer to @answer' do
-        expect(assigns(:answer)).to eq answer
-      end
-
-      it 'render edit view' do
-        expect(response).to render_template :edit
-      end
-    end
-  end
-
   describe 'PATCH #update' do
     let!(:author_answer) { create(:answer, question: question, user: @user) }
 
     context 'update by author with valid attributes' do
-      before { process :update, method: :patch, params: { id: author_answer.id, question_id: question, answer: { body: 'new body_10' } } }
+      before { process :update, method: :patch, params: { id: author_answer.id, question_id: question, answer: { body: 'new body_10' } }, format: :js }
 
       it 'assigns the requested answer to @answer' do
         expect(assigns(:answer)).to eq author_answer
+      end
+
+      it ' assigns the question' do
+        expect(assigns(:question)).to eq question
       end
 
       it 'change answer attributes' do
@@ -70,8 +61,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(author_answer.body).to eq 'new body_10'
       end
 
-      it 'redirect to question show view' do
-        expect(response).to redirect_to question_path(assigns(:question))
+      it 'render update template' do
+        expect(response).to render_template :update
       end
 
     end
@@ -86,6 +77,16 @@ RSpec.describe AnswersController, type: :controller do
 
       it 're-render question view' do
         expect(response).to render_template :update
+      end
+    end
+
+    context 'As non-author of answer' do
+      let!(:foreign_answer) { create(:answer) }
+      let(:update_foreign_answer) { post :update, params: { question_id: foreign_answer.question.id, id: foreign_answer.id, answer: { body: 'edited body' }, format: :js } }
+
+      it 'does not update foreign answer' do
+        expect { update_foreign_answer }.to_not change { foreign_answer.reload.body }
+        expect { update_foreign_answer }.to_not change { foreign_answer.reload.updated_at }
       end
     end
 

@@ -1,21 +1,16 @@
-div id= "question-#{@question.id}"
- .question-data
-    h3= @question.title
-    a author:
-    a= @question.user.email
-    p=  @question.body
+    #question-block= render 'question'
 
     table.answers
       = render @question.answers
-
 
     - if user_signed_in?
      = render "answers/form"
 
      - if current_user.owner?(@question)
       h3 Update question.
+      = link_to 'Edit question', "", class: 'edit-question-link'
       = render 'common/errors', resource: @question
-      = form_for @question, html: {id: "edit-question-#{@question.id}"}, remote: true do |f|
+      = form_for @question, html: {class: 'edit-question-form'}, remote: true do |f|
        = f.label :title, 'Update question title'
        = f.text_field :title
        br
