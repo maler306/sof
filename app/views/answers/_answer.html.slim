@@ -1,12 +1,12 @@
 - if answer.persisted?
-  tr
-    td.body
-        = answer.body
-    - if user_signed_in? && current_user.owner?(answer)
-       td= link_to 'Edit answer', "", class: 'edit-answer-link', data: { answer_id: answer.id }
-       td= form_for [@question, answer], remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|
-          = f.label :body, "Answer"
-          = f.text_area :body
-          = f.submit 'Save'
+    tr id= "answer-#{answer.id}"
+      td.body
+          = answer.body
+      - if user_signed_in? && current_user.owner?(answer)
+         td= link_to 'Edit answer', "", class: 'edit-answer-link', data: { answer_id: answer.id }
+         td= form_for [@question, answer], remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|
+            = f.label :body, "Answer"
+            = f.text_area :body
+            = f.submit 'Save'
 
-       td = link_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete, data: { confirm: 'Are you sure?' }
+         td = link_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete, data: { confirm: 'Are you sure?' }

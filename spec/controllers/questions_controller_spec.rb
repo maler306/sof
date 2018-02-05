@@ -119,6 +119,17 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
+    context 'As non-author of question' do
+      let!(:foreign_question) { create(:question) }
+      let(:update_foreign_question) { post :update, params: { id: foreign_question.id, question: { title: 'edited title', body: 'edited body' }, format: :js } }
+
+      it 'does not update foreign question' do
+        expect { update_foreign_question}.to_not change { foreign_question.reload.title }
+        expect { update_foreign_question}.to_not change { foreign_question.reload.body }
+        expect { update_foreign_question }.to_not change { foreign_question.reload.updated_at }
+      end
+    end
+
   end
 
   describe 'DELETE #destroy' do

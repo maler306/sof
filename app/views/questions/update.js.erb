@@ -1,3 +1,4 @@
+$('.flash').html('<%= flash[:notlice] %>');
 <% if @question.errors.present? %>
     <% @question.errors.full_messages.each do |message| %>
         $('.question-errors').append('<%= j message %>');

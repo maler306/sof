@@ -31,11 +31,8 @@ class QuestionsController < ApplicationController
   def update
     if current_user.owner?(@question)
       @question.update(question_params)
-      # redirect_to @question
-      flash[:notice] = 'Your question successfully edited.'
     else
-      flash[:notice] = 'Question not edited.'
-      # render :edit
+      flash[:notice] = 'You are not the author question.'
     end
   end
 

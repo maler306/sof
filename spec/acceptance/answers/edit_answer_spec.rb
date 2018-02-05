@@ -30,7 +30,6 @@ feature 'Edit answer', %q{
         click_on 'Update answer'
 
         expect(page).to_not have_content answer.body
-        expect(page).to have_content 'Your answer successfully edited.'
         expect(page).to have_content 'Edit_text text text'
         expect(page).to_not have_selector 'textarea'
       end
@@ -43,7 +42,6 @@ feature 'Edit answer', %q{
         click_on 'Update answer'
 
         expect(current_path).to eq edit_question_answer_path(question, answer)
-        expect(page).to have_content 'Your answer not updated'
         expect(page).to have_content "Body can't be blank"
         expect(page).to have_content 'Body is too short (minimum is 10 characters)'
       end

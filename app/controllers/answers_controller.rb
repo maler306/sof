@@ -16,9 +16,8 @@ class AnswersController < ApplicationController
   def update
     if current_user.owner?(@answer)
       @answer.update(answer_params)
-      flash[:notice] = 'Your answer successfully edited.'
     else
-      flash[:notice] = 'Your answer not updated'
+      flash[:notice] = 'Your are not author of the answer'
     end
   end
 
@@ -29,7 +28,8 @@ class AnswersController < ApplicationController
     else
       flash[:notice] = 'Your are not author of the answer'
     end
-    redirect_to @question
+    render :destroy
+    # redirect_to @question
   end
 
   private
