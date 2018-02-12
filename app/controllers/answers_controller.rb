@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:create, :destroy, :update, :edit]
-  before_action :set_answer, only: [:edit, :update, :destroy]
+  before_action :set_question, only: [:create, :destroy, :update, :edit, :best]
+  before_action :set_answer, only: [:edit, :update, :destroy, :best]
 
   def create
     @answer = @question.answers.create(answer_params)
@@ -28,8 +28,10 @@ class AnswersController < ApplicationController
     else
       flash[:notice] = 'Your are not author of the answer'
     end
-    render :destroy
-    # redirect_to @question
+  end
+
+  def best
+    @answer.accept_best if current_user.owner?(@answer.question)
   end
 
   private

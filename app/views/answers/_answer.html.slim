@@ -1,7 +1,14 @@
 - if answer.persisted?
-    tr id= "answer-#{answer.id}"
+    tr id= "answer-#{answer.id}" class=("best-answer" if answer.best)
       td.body
           = answer.body
+      - if answer.best
+          td
+            strong
+              | The best answer
+      - elsif user_signed_in? && current_user.owner?(answer.question) && !answer.best
+          td= button_to 'chose as the best', best_question_answer_path(@question, answer), method: :patch, remote: true
+
       - if user_signed_in? && current_user.owner?(answer)
          td= link_to 'Edit answer', "", class: 'edit-answer-link', data: { answer_id: answer.id }
          td= form_for [@question, answer], remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|
