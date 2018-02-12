@@ -1,7 +1,6 @@
 .flash
-.answer-errors
 = form_for [@question, @answer], remote: true  do |f|
-  = render 'common/errors', resource: @answer
+  .answer-errors
   = f.label :body, 'Give your answer'
   = f.text_area :body
   = f.submit 'Add answer'
