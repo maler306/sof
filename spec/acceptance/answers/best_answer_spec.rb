@@ -15,12 +15,12 @@ feature 'Choose best answer', %q{
     before { visit question_path(question) }
 
     scenario 'as a unauthenticated user' do
-      expect(page).to_not have_link 'chose as the best'
+      expect(page).to_not have_link 'choose as the best'
     end
 
     scenario 'as a authenticated user' do
       sign_in(user)
-      expect(page).to_not have_link 'chose as the best'
+      expect(page).to_not have_link 'choose as the best'
     end
   end
 
@@ -31,12 +31,12 @@ feature 'Choose best answer', %q{
     end
 
     scenario 'see the button to choose the best answer' do
-      expect(page).to have_button 'chose as the best', count: 2
+      expect(page).to have_button 'choose as the best', count: 2
     end
 
     scenario 'try to choose the best answer', js: true do
       within "#answer-#{answers.last.id}" do
-        click_on 'chose as the best'
+        click_on 'choose as the best'
       end
 
       within '.best-answer' do
@@ -44,15 +44,20 @@ feature 'Choose best answer', %q{
         expect(page).to have_content "The best answer"
         expect(page).to_not have_content answers.first.body
       end
+
+      within '.answers' do
+        expect(page).to have_css("tr:first-child", :class => "best-answer")
+      end
+
     end
 
-    scenario 'try to choose another best answer, when one already chosen', js: true do
+    scenario 'try to choose another best answer, when one already choosen', js: true do
       within "#answer-#{answers.last.id}" do
-        click_on 'chose as the best'
+        click_on 'choose as the best'
       end
 
       within "#answer-#{answers.first.id}" do
-        click_on 'chose as the best'
+        click_on 'choose as the best'
       end
 
       within '.best-answer' do

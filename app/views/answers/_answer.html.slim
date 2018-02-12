@@ -7,13 +7,13 @@
             strong
               | The best answer
       - elsif user_signed_in? && current_user.owner?(answer.question) && !answer.best
-          td= button_to 'chose as the best', best_question_answer_path(@question, answer), method: :patch, remote: true
+          td= button_to 'choose as the best', best_question_answer_path(@question, answer), method: :patch, remote: true
 
       - if user_signed_in? && current_user.owner?(answer)
          td= link_to 'Edit answer', "", class: 'edit-answer-link', data: { answer_id: answer.id }
          td= form_for [@question, answer], remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|
             = f.label :body, "Answer"
             = f.text_area :body
-            = f.submit 'Save'
+            = f.submit 'Save update'
 
          td = link_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete, data: { confirm: 'Are you sure?' }

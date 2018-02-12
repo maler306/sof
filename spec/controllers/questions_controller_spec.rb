@@ -46,18 +46,18 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    sign_in_user
-    before { get :edit, params: {id: question} }
+  # describe 'GET #edit' do
+  #   sign_in_user
+  #   before { get :edit, params: {id: question} }
 
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq question
-    end
+  #   it 'assigns the requested question to @question' do
+  #     expect(assigns(:question)).to eq question
+  #   end
 
-    it 'render edit view' do
-      expect(response).to render_template :edit
-    end
-  end
+  #   it 'render edit view' do
+  #     expect(response).to render_template :edit
+  #   end
+  # end
 
   describe 'POST #create' do
     sign_in_user
@@ -89,7 +89,7 @@ RSpec.describe QuestionsController, type: :controller do
     let!(:users_question) { create(:question, user: @user) }
 
     context 'update by author with valid attributes' do
-      before { process :update, method: :patch, params: {id: users_question.id, question:  { title: 'new title', body: 'new body' } } }
+      before { process :update, method: :patch, params: {id: users_question.id, question:  { title: 'new title', body: 'new body' } }, format: :js }
 
       it 'assigns the requested question to @question' do
         expect(assigns(:question)).to eq users_question
@@ -101,21 +101,22 @@ RSpec.describe QuestionsController, type: :controller do
         expect(users_question.body).to eq 'new body'
       end
 
-      it 'redirects to the updated question' do
-        expect(response).to redirect_to users_question
+      it 'renders update template' do
+        expect(response).to render_template :update
       end
     end
 
     context 'update by author with invalid attributes' do
-      before { patch :update, params: { id: users_question.id, question:  { title: 'new title', body: nil} } }
+      before { patch :update, params: { id: users_question.id, question:  { title: 'new title', body: nil} }, format: :js }
+
       it 'does not change question attributes' do
         users_question.reload
         expect(question.title).to eq 'MyString'
         expect(question.body).to eq 'MyText'
       end
 
-      it 're-render edit view' do
-        expect(response).to render_template :edit
+      it 'renders update template' do
+        expect(response).to render_template :update
       end
     end
 

@@ -5,6 +5,8 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user)}
   let(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, question: question, user: user) }
+  let(:other_question) { create(:question) }
+  let(:other_question_answer) { create(:answer, question: other_question) }
   sign_in_user
 
   describe 'POST #create' do
@@ -98,27 +100,66 @@ RSpec.describe AnswersController, type: :controller do
       let(:author_answer) { create(:answer, question: question, user: @user) }
       it 'deletes answer' do
         author_answer
-        expect { delete :destroy, params: { id: author_answer, question_id: question } }.to change(@user.answers, :count).by(-1)
+        expect { delete :destroy, params: { id: author_answer, question_id: question }, format: :js }.to change(@user.answers, :count).by(-1)
       end
 
-      it 'redirect to question show view' do
-        delete :destroy, params: { id: author_answer, question_id: question }
-        expect(response).to redirect_to question_path(question)
+      it 'renders destroy template' do
+        delete :destroy, params: { question_id: question, id: answer }, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
     context 'NotAuthor answer' do
       it 'not deletes answer' do
         answer
-        expect { delete :destroy, params: { id: answer, question_id: question } }.not_to change(Answer, :count)
+        expect { delete :destroy, params: { id: answer, question_id: question }, format: :js }.not_to change(Answer, :count)
       end
 
-      it 'redirect to question show view' do
-        delete :destroy, params: { id: answer, question_id: question }
-        expect(response).to redirect_to question_path(question)
+      it 'renders destroy template' do
+        delete :destroy, params: { question_id: question, id: answer }, format: :js
+        expect(response).to render_template :destroy
       end
 
     end
+  end
+
+  describe 'PATCH#best_answer' do
+    let(:foreing_question)  { create(:question) }
+    let(:another_answer)   { create(:answer, question: foreing_question) }
+
+    before {question.update(user: @user) }
+
+    context 'question owner' do
+      it 'choose answer best' do
+        patch :best, params: {  question_id: question, id: answer}, format: :js
+        answer.reload
+        expect(answer.best).to be true
+      end
+
+      it 'render update template' do
+        patch :best, params: { question_id: question, id: answer }, format: :js
+        expect(response).to render_template :best
+      end
+    end
+
+    context 'question owner choose another best answer' do
+    let(:best_answer)  { create(:answer, best: true, question: question) }
+
+      it 'choose another best answer' do
+        patch :best, params: {  question_id: question, id: answer}, format: :js
+        answer.reload
+        expect(answer.best).to be true
+      end
+    end
+
+    context 'not question owner' do
+      it 'Can not choose answer best' do
+        patch :best, params: {  question_id: question, id: another_answer}, format: :js
+        another_answer.reload
+        expect(another_answer.best).to be false
+      end
+    end
+
   end
 
 end

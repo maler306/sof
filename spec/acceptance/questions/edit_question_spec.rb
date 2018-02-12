@@ -31,8 +31,11 @@ feature 'Edit question', %q{
       expect(page).to_not have_content question.body
       expect(page).to have_content 'Edited question'
       expect(page).to have_content 'Edit_text text text'
-      # expected not to find css "textarea", found 1 match: "". Also found "", which matched the selector but not all filters.
-      # expect(page).to_not have_selector 'textarea'
+
+      within '.edit-question' do
+        expect(page).to_not have_selector 'textarea'
+      end
+
     end
 
     scenario 'Can not update question with invalid data', js: true do

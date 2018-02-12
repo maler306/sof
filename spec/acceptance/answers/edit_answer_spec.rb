@@ -24,27 +24,32 @@ feature 'Edit answer', %q{
     end
 
     scenario 'Can edit own answer', js: true  do
-      click_on 'Edit answer'
-      within '.answers' do
-        fill_in 'Edit your answer:', with: 'Edit_text text text'
-        click_on 'Update answer'
+
+      within "#answer-#{answer.id}" do
+        click_on 'Edit answer'
+
+        expect(page).to have_field('Answer')
+        expect(page).to_not have_content 'Edit answer'
+        fill_in 'Answer', with: 'Edit_text text text'
+        click_on 'Save update'
 
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'Edit_text text text'
         expect(page).to_not have_selector 'textarea'
+        expect(page).to have_content 'Edit answer'
       end
     end
 
     scenario 'Can not edit his own answer with invalid data', js: true  do
-      click_on 'Edit answer'
-      within '.answers' do
-        fill_in 'Edit your answer:', with: ''
-        click_on 'Update answer'
+      within "#answer-#{answer.id}" do
+        click_on 'Edit answer'
 
-        expect(current_path).to eq edit_question_answer_path(question, answer)
-        expect(page).to have_content "Body can't be blank"
-        expect(page).to have_content 'Body is too short (minimum is 10 characters)'
+        fill_in 'Answer', with: ''
+        click_on 'Save update'
       end
+
+      expect(page).to have_content "Body can't be blank"
+      expect(page).to have_content 'Body is too short (minimum is 10 characters)'
     end
 
   end

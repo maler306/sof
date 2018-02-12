@@ -6,19 +6,20 @@ table.answers
 - if user_signed_in?
  = render "answers/form"
 
-  - if current_user.owner?(@question)
+ - if current_user.owner?(@question)
     h3 Update question.
     .question-errors
-    = link_to 'Edit question', "", class: 'edit-question-link'
-    br
-    = form_for @question, html: {class: 'edit-question-form'}, remote: true do |f|
-     = f.label :title, 'Update question title'
-     = f.text_field :title
-     br
+    .edit-question
+      = link_to 'Edit question', "", class: 'edit-question-link'
+      br
+      = form_for @question, html: {class: 'edit-question-form'}, remote: true do |f|
+       = f.label :title, 'Update question title'
+       = f.text_field :title
+       br
 
-     = f.label :body, 'Update question body'
-     = f.text_area :body
-     = f.submit "Update question"
-     br
+       = f.label :body, 'Update question body'
+       = f.text_area :body
+       = f.submit "Update question"
+       br
 
     = link_to 'Delete question', @question, method: :delete, data: { confirm: 'Are you sure?' }
